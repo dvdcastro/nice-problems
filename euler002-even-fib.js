@@ -31,16 +31,13 @@ function main() {
 }
 
 var EvenFibHelper = function() {
-    var evenSum, fibRes, maxN;
+    var evenSum, fibRes = [], maxN, alreadySummed = 0, evenRes = [];
+
+    fibRes[0] = 0;
+    fibRes[1] = 1;
 
     var init  = function() {
         evenSum = 0;
-
-        fibRes = [];
-
-        fibRes[0] = 0;
-        fibRes[1] = 1;
-
         maxN = null;
     };
 
@@ -56,15 +53,27 @@ var EvenFibHelper = function() {
         } else {
             res = fib(n - 1) + fib(n - 2);
             fibRes[n] = res;
+        }
+
+        if (alreadySummed < n) {
             evenSum += (res <= maxN && ((res % 2) === 0) ? res : 0);
+            alreadySummed = n;
         }
 
         return res;
     };
 
+    var updateSum = function(m) {
+        for (var i = 0; i <= m; i++) {
+            var res = fibRes[i];
+            evenSum += (res <= m && ((res % 2) === 0) ? res : 0);
+        }
+    };
+
     return {
         evenFib: function(n) {
             init();
+            updateSum(n);
             fib(n);
             return evenSum;
         }
